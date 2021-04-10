@@ -33,7 +33,6 @@ namespace {@namespace}
 {{
     {modifier} static class {className}
     {{
-
         /// <summary>
         /// Searches for a file among Embedded resources <br/>
         /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
@@ -66,6 +65,29 @@ namespace {@namespace}
             }}
         }}
 
+        /// <summary>
+        /// Searches for a file among Embedded resources <br/>
+        /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
+        /// <![CDATA[Version: 1.0.0.2]]> <br/>
+        /// <![CDATA[Dependency: ReadFileAsStream(string name, Assembly? assembly = null)]]> <br/>
+        /// </summary>
+        /// <param name=""name""></param>
+        /// <param name=""assembly""></param>
+        /// <exception cref=""ArgumentNullException""></exception>
+        /// <exception cref=""ArgumentException""></exception>
+        /// <returns></returns>
+        public static byte[] ReadFileAsBytes(string name, Assembly? assembly = null)
+        {{
+            name = name ?? throw new ArgumentNullException(nameof(name));
+
+            using var stream = ReadFileAsStream(name, assembly);
+            using var memoryStream = new MemoryStream();
+
+            stream.CopyTo(memoryStream);
+
+            return memoryStream.ToArray();
+        }}
+
         private static System.Drawing.Image GetBitmap(string name)
         {{
             using var stream = ReadFileAsStream(name);
@@ -74,8 +96,8 @@ namespace {@namespace}
         }}
 
 {
-string.Join(Environment.NewLine, resources.Select(resource =>
-$"        {modifier} static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
+string.Join(Environment.NewLine, resources.Select(static resource =>
+$"        public static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
 }
     }}
 }}
