@@ -22,6 +22,11 @@ namespace H.Resources.Generator
 
 
             return @$"
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
 namespace {@namespace}
 {{
     {modifier} static class {className}

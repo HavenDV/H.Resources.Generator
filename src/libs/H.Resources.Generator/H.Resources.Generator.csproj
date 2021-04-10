@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Description>Generates static class with all Embedded resources with specified types. 
 Suitable for situations where you want to have a multi-target solution containing both .Net Framework and .Net Core/.Net 5

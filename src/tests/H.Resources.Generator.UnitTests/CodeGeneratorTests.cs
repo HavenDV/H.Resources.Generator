@@ -11,6 +11,11 @@ namespace H.Resources.Generator.UnitTests
             var code = CodeGenerator.Generate("H", "internal", "Resources", new []{ "path1.png" });
 
             Assert.AreEqual(@"
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
 namespace H
 {
     internal static class Resources
