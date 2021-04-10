@@ -27,7 +27,7 @@ Suitable for situations where you want to have a multi-target solution containin
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0-1.final" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

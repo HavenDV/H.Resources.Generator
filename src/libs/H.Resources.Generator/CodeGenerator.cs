@@ -1,20 +1,31 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.IO;
+using System.Linq;
 
-namespace H.Resources.Generator.UnitTests
+namespace H.Resources.Generator
 {
-    [TestClass]
-    public class Tests
+    public static class CodeGenerator
     {
-        [TestMethod]
-        public void GenerateTest()
+        #region Methods
+
+        public static string Generate(string @namespace, string modifier, string className, string[] paths)
         {
-            var code = CodeGenerator.Generate("H", "internal", "Resources", new []{ "path1.png" });
+            var resources = paths
+                .Select(static path => new Resource
+                {
+                    Name = Path.GetFileNameWithoutExtension(path),
+                    Type = "System.Drawing.Image",
+                    Method = "GetBitmap",
+                    FileName = Path.GetFileName(path),
+                })
+                .ToArray();
 
-            Assert.AreEqual(@"
-namespace H
-{
-    internal static class Resources
-    {
+
+            return @$"
+namespace {@namespace}
+{{
+    {modifier} static class {className}
+    {{
 
         /// <summary>
         /// Searches for a file among Embedded resources <br/>
@@ -27,38 +38,43 @@ namespace H
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
         private static Stream ReadFileAsStream(string name, Assembly? assembly = null)
-        {
+        {{
             name = name ?? throw new ArgumentNullException(nameof(name));
             assembly ??= Assembly.GetExecutingAssembly();
 
             try
-            {
+            {{
                 return assembly.GetManifestResourceStream(
                            assembly
                                .GetManifestResourceNames()
                                .Single(resourceName => resourceName.EndsWith(name, StringComparison.InvariantCultureIgnoreCase)))
-                       ?? throw new ArgumentException($""\""{name}\"" is not found in embedded resources"");
-            }
+                       ?? throw new ArgumentException($""\""{{name}}\"" is not found in embedded resources"");
+            }}
             catch (InvalidOperationException exception)
-            {
+            {{
                 throw new ArgumentException(
                     ""Not a single one was found or more than one resource with the given name was found. "" +
                     ""Make sure there are no collisions and the required file has the attribute \""Embedded resource\"""", 
                     exception);
-            }
-        }
+            }}
+        }}
 
         private static System.Drawing.Image GetBitmap(string name)
-        {
+        {{
             using var stream = ReadFileAsStream(name);
 
             return System.Drawing.Image.FromStream(stream);
+        }}
+
+{
+string.Join(Environment.NewLine, resources.Select(resource =>
+$"        {modifier} static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
+}
+    }}
+}}
+";
         }
 
-        internal static System.Drawing.Image path1 => GetBitmap(""path1.png"");
-    }
-}
-", code);
-        }
+        #endregion
     }
 }
