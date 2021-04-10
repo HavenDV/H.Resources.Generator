@@ -8,29 +8,24 @@ using Microsoft.CodeAnalysis.Text;
 namespace H.Resources.Generator
 {
     [Generator]
-    public class ResourcesGenerator : ISourceGenerator
+    public class SourceGenerator : ISourceGenerator
     {
         #region Methods
 
-        public void Execute(GeneratorExecutionContext context)
+        public static string Generate(string @namespace, string modifier, string className, string[] paths)
         {
-            try
-            {
-                const string @namespace = "H";
-                const string modifier = "internal";
-                const string className = "Resources";
-                var resources = context.AdditionalFiles
-                    .Select(static value => new Resource
-                    {
-                        Name = Path.GetFileNameWithoutExtension(value.Path),
-                        Type = "System.Drawing.Image",
-                        Method = "GetBitmap",
-                        FileName = Path.GetFileName(value.Path),
-                    })
-                    .ToArray();
-                
+            var resources = paths
+                .Select(static path => new Resource
+                {
+                    Name = Path.GetFileNameWithoutExtension(path),
+                    Type = "System.Drawing.Image",
+                    Method = "GetBitmap",
+                    FileName = Path.GetFileName(path),
+                })
+                .ToArray();
 
-                context.AddSource("NSwag Generated CSharp Code", SourceText.From(@$"
+
+            return @$"
 namespace {@namespace}
 {{
     {modifier} static class {className}
@@ -76,12 +71,24 @@ namespace {@namespace}
         }}
 
 {
-string.Join(Environment.NewLine, resources.Select(static resource => 
+string.Join(Environment.NewLine, resources.Select(resource =>
 $"        {modifier} static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
 }
     }}
 }}
-", Encoding.UTF8));
+";
+        }
+
+        public void Execute(GeneratorExecutionContext context)
+        {
+            try
+            {
+                var paths = context.AdditionalFiles
+                    .Select(static value => value.Path)
+                    .ToArray();
+
+                var code = Generate("H", "internal", "Resources", paths);
+                context.AddSource("H.Resources.Generator Generated CSharp Code", SourceText.From(code, Encoding.UTF8));
             }
             catch (Exception exception)
             {
