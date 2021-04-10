@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Description>Generates static class with all Embedded resources with specified types. 
 Suitable for situations where you want to have a multi-target solution containing both .Net Framework and .Net Core/.Net 5
@@ -13,8 +13,8 @@ Suitable for situations where you want to have a multi-target solution containin
     <PackageTags>resources, generator, source generator, csharp 9</PackageTags>
     <NoWarn>$(NoWarn);NU5128;CA1014;CA1031</NoWarn>
     <DevelopmentDependency>true</DevelopmentDependency>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <IncludeSymbols>false</IncludeSymbols>
+    <!--<IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>-->
   </PropertyGroup>
 
   <ItemGroup>
