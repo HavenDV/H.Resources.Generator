@@ -27,6 +27,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+#nullable enable
+
 namespace {@namespace}
 {{
     {modifier} static class {className}
