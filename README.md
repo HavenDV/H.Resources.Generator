@@ -18,10 +18,10 @@ Install-Package H.Resources.Generator
 ### Usage
 
 ```xml
-  <ItemGroup Label="Images">
-    <EmbeddedResource Include="Images\*.png" />
-    <AdditionalFiles Include="Images\*.png" />
-  </ItemGroup>
+<ItemGroup Label="Images">
+  <EmbeddedResource Include="Images\*.png" />
+  <AdditionalFiles Include="Images\*.png" />
+</ItemGroup>
 ```
 
 ### Contacts

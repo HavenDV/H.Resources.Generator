@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace H.Resources.Generator.UnitTests
 {
     [TestClass]
-    public class Tests
+    public class CodeGeneratorTests
     {
         [TestMethod]
         public void GenerateTest()
