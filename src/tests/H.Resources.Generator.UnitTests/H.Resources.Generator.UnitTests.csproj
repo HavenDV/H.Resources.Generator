@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\$PROJECT_NAME$\$PROJECT_NAME$.csproj" />
+    <ProjectReference Include="..\..\libs\H.Resources.Generator\H.Resources.Generator.csproj" />
   </ItemGroup>
 
 </Project>

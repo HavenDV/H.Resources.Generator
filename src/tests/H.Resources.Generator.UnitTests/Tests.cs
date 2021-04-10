@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace $PROJECT_NAME$.UnitTests
+namespace H.Resources.Generator.UnitTests
 {
     [TestClass]
     public class Tests
