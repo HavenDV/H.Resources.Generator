@@ -9,7 +9,14 @@ namespace H.Resources.Generator.UnitTests
         [TestMethod]
         public void GenerateTest()
         {
-            var code = CodeGenerator.Generate("H", "internal", "Resources", new []{ "path1.png" });
+            var code = CodeGenerator.Generate("H", "internal", "Resources", new[]
+            {
+                new Resource
+                {
+                    Path = "path1.png", 
+                    Type = "Image",
+                },
+            });
 
             code.Should().Be(@"
 using System;
