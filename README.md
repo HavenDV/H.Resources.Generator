@@ -20,9 +20,18 @@ Install-Package H.Resources.Generator
 ```xml
 <ItemGroup Label="Images">
   <EmbeddedResource Include="Images\*.png" />
-  <AdditionalFiles Include="Images\*.png" />
+  <AdditionalFiles Include="Images\*.png" /> // It creates System.Drawing.Image properties
 </ItemGroup>
 ```
+
+You can set up type explicitly:
+```xml
+<AdditionalFiles Include="Images\*.png" Type="Bytes" /> // It creates byte[] properties
+```
+
+Supported types:
+- Image(System.Drawing.Image)
+- Bytes(byte[])
 
 ### Contacts
 * [mail](mailto:havendv@gmail.com)

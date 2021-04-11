@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -8,18 +9,38 @@ namespace H.Resources.Generator
     {
         #region Methods
 
-        public static string Generate(string @namespace, string modifier, string className, string[] paths)
+        public static string GetTypeByExtension(string extension)
         {
-            var resources = paths
-                .Select(static path => new Resource
+            return extension switch
+            {
+                ".png" => "Image",
+                _ => "Bytes",
+            };
+        }
+
+        public static string Generate(
+            string @namespace, 
+            string modifier, 
+            string className, 
+            IEnumerable<Resource> resources)
+        {
+            var properties = resources
+                .Select(static resource => new GeneratedProperty
                 {
-                    Name = Path.GetFileNameWithoutExtension(path),
-                    Type = "System.Drawing.Image",
-                    Method = "GetBitmap",
-                    FileName = Path.GetFileName(path),
+                    Name = Path.GetFileNameWithoutExtension(resource.Path),
+                    Type = resource.Type switch
+                    {
+                        "Image" => "System.Drawing.Image",
+                        _ => "byte[]",
+                    },
+                    Method = resource.Type switch
+                    {
+                        "Image" => "GetBitmap",
+                        _ => "ReadFileAsBytes",
+                    },
+                    FileName = Path.GetFileName(resource.Path),
                 })
                 .ToArray();
-
 
             return @$"
 using System;
@@ -96,7 +117,7 @@ namespace {@namespace}
         }}
 
 {
-string.Join(Environment.NewLine, resources.Select(static resource =>
+string.Join(Environment.NewLine, properties.Select(static resource =>
 $"        public static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
 }
     }}
