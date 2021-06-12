@@ -24,6 +24,11 @@ Install-Package H.Resources.Generator
 </ItemGroup>
 ```
 
+After it, use resource in code:
+```cs
+var image = H.Resources.ImageName;
+```
+
 You can set up type explicitly:
 ```xml
 <AdditionalFiles Include="Images\*.png" Type="Bytes" /> // It creates byte[] properties
@@ -31,6 +36,7 @@ You can set up type explicitly:
 
 Supported types:
 - Image(System.Drawing.Image)
+- Stream(System.IO.Stream)
 - Bytes(byte[])
 
 ### Contacts

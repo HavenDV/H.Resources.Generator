@@ -33,11 +33,13 @@ namespace H.Resources.Generator
                     Type = resource.Type switch
                     {
                         "Image" => "System.Drawing.Image",
+                        "Stream" => "System.IO.Stream",
                         _ => "byte[]",
                     },
                     Method = resource.Type switch
                     {
                         "Image" => "GetBitmap",
+                        "Stream" => "ReadFileAsStream",
                         _ => "ReadFileAsBytes",
                     },
                     FileName = Path.GetFileName(resource.Path),
@@ -66,7 +68,7 @@ namespace {@namespace}
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        private static Stream ReadFileAsStream(string name, Assembly? assembly = null)
+        private static System.IO.Stream ReadFileAsStream(string name, Assembly? assembly = null)
         {{
             name = name ?? throw new ArgumentNullException(nameof(name));
             assembly ??= Assembly.GetExecutingAssembly();

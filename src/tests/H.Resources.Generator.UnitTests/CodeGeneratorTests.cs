@@ -18,8 +18,13 @@ namespace H.Resources.Generator.UnitTests
                 },
                 new Resource
                 {
-                    Path = "filename with whitespaces.png",
+                    Path = "path with whitespaces.png",
                     Type = "Image",
+                },
+                new Resource
+                {
+                    Path = "path3.png",
+                    Type = "Stream",
                 },
             });
 
@@ -45,7 +50,7 @@ namespace H
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        private static Stream ReadFileAsStream(string name, Assembly? assembly = null)
+        private static System.IO.Stream ReadFileAsStream(string name, Assembly? assembly = null)
         {
             name = name ?? throw new ArgumentNullException(nameof(name));
             assembly ??= Assembly.GetExecutingAssembly();
@@ -98,7 +103,8 @@ namespace H
         }
 
         public static System.Drawing.Image path1 => GetBitmap(""path1.png"");
-        public static System.Drawing.Image filename_with_whitespaces => GetBitmap(""filename with whitespaces.png"");
+        public static System.Drawing.Image path_with_whitespaces => GetBitmap(""path with whitespaces.png"");
+        public static System.IO.Stream path3 => ReadFileAsStream(""path3.png"");
     }
 }
 ");
