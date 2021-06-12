@@ -2,18 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <NoWarn>$(NoWarn);NU5128;CA1014;CA1031</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet">
-    <Version>1.0.5</Version>
-    <PackageReleaseNotes>
-fix: Fixed paths with '-'.
-    </PackageReleaseNotes>
+    <BUILD_NUMBER Condition="'$(BUILD_NUMBER)' == ''">1</BUILD_NUMBER>
+    <Version>1.1.$(BUILD_NUMBER)</Version>
+    <PackageReleaseNotes>$(PACKAGE_RELEASE_NOTES)</PackageReleaseNotes>
     <Description>Generates static class with all Embedded resources with specified types. 
 Suitable for situations where you want to have a multi-target solution containing both .Net Framework and .Net Core/.Net 5
     </Description>
     <PackageTags>resources, generator, source generator, csharp 9</PackageTags>
-    <NoWarn>$(NoWarn);NU5128;CA1014;CA1031</NoWarn>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
@@ -25,10 +24,6 @@ Suitable for situations where you want to have a multi-target solution containin
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.10.0" PrivateAssets="all" />
   </ItemGroup>
 

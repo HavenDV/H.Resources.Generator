@@ -44,9 +44,8 @@
 
   <PropertyGroup Label="Analyzers">
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-	<AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <NoWarn>$(NoWarn)</NoWarn>
   </PropertyGroup>
 
 </Project>
