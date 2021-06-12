@@ -63,7 +63,8 @@ namespace H.Resources.Generator
         {
             return context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
                 $"build_property.HResourcesGenerator_{name}", 
-                out var result)
+                out var result) &&
+                !string.IsNullOrWhiteSpace(result)
                 ? result
                 : null;
         }
@@ -74,8 +75,9 @@ namespace H.Resources.Generator
             AdditionalText text)
         {
             return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
-                $"build_property.HResourcesGenerator_{name}", 
-                out var result)
+                $"build_metadata.AdditionalFiles.HResourcesGenerator_{name}", 
+                out var result) &&
+                !string.IsNullOrWhiteSpace(result)
                 ? result
                 : null;
         }
