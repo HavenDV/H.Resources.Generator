@@ -120,8 +120,8 @@ namespace {@namespace}
             using var stream = ReadFileAsStream(name);
 
             return System.Drawing.Image.FromStream(stream);
-        }" : "")}
-
+        }
+" : "")}
 {
 string.Join(Environment.NewLine, properties.Select(static resource =>
 $"        public static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
