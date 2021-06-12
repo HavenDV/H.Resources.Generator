@@ -22,8 +22,10 @@ namespace H.Resources.Generator
             string @namespace, 
             string modifier, 
             string className, 
-            IEnumerable<Resource> resources)
+            IReadOnlyCollection<Resource> resources)
         {
+            var withSystemDrawing = resources.Any(static resource => resource.Type == "Image");
+
             var properties = resources
                 .Select(static resource => new GeneratedProperty
                 {
@@ -112,13 +114,13 @@ namespace {@namespace}
 
             return memoryStream.ToArray();
         }}
-
+{(withSystemDrawing ? @"
         private static System.Drawing.Image GetBitmap(string name)
-        {{
+        {
             using var stream = ReadFileAsStream(name);
 
             return System.Drawing.Image.FromStream(stream);
-        }}
+        }" : "")}
 
 {
 string.Join(Environment.NewLine, properties.Select(static resource =>
