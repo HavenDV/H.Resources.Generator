@@ -28,7 +28,8 @@ namespace H.Resources.Generator
                 .Select(static resource => new GeneratedProperty
                 {
                     Name = Path.GetFileNameWithoutExtension(resource.Path)
-                        .Replace("-", string.Empty),
+                        .Replace("-", string.Empty)
+                        .Replace(" ", "_"),
                     Type = resource.Type switch
                     {
                         "Image" => "System.Drawing.Image",

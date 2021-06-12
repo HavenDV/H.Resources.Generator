@@ -16,6 +16,11 @@ namespace H.Resources.Generator.UnitTests
                     Path = "path1.png", 
                     Type = "Image",
                 },
+                new Resource
+                {
+                    Path = "filename with whitespaces.png",
+                    Type = "Image",
+                },
             });
 
             code.Should().Be(@"
@@ -93,6 +98,7 @@ namespace H
         }
 
         public static System.Drawing.Image path1 => GetBitmap(""path1.png"");
+        public static System.Drawing.Image filename_with_whitespaces => GetBitmap(""filename with whitespaces.png"");
     }
 }
 ");
