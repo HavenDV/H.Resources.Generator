@@ -31,13 +31,22 @@ var image = H.Resources.ImageName;
 
 You can set up type explicitly:
 ```xml
-<AdditionalFiles Include="Images\*.png" Type="Bytes" /> // It creates byte[] properties
+<AdditionalFiles Include="Images\*.png" HResourcesGenerator_Type="Bytes" /> // It creates byte[] properties
 ```
 
 Supported types:
 - Image(System.Drawing.Image)
 - Stream(System.IO.Stream)
 - Bytes(byte[])
+
+Global options(Default values are provided and can be omitted):
+```xml
+<PropertyGroup>
+  <HResourcesGenerator_Namespace>H</HResourcesGenerator_Namespace>
+  <HResourcesGenerator_Modifier>internal</HResourcesGenerator_Modifier>
+  <HResourcesGenerator_ClassName>Resources</HResourcesGenerator_ClassName>
+</PropertyGroup>
+```
 
 ### Contacts
 * [mail](mailto:havendv@gmail.com)

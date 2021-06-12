@@ -21,13 +21,20 @@ namespace H.Resources.Generator
                     {
                         Path = value.Path,
                         Type = 
-                            (TryGetOption(context, nameof(Resource.Type), value, out var result) ? result : null) ?? 
+                            GetOption(context, nameof(Resource.Type), value) ?? 
                             CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path)),
                     })
                     .ToArray();
 
-                var code = CodeGenerator.Generate("H", "internal", "Resources", resources);
-                context.AddSource("H.Resources.Generator Generated CSharp Code", SourceText.From(code, Encoding.UTF8));
+                var code = CodeGenerator.Generate(
+                    GetGlobalOption(context, "Namespace") ?? "H",
+                    GetGlobalOption(context, "Modifier") ?? "internal",
+                    GetGlobalOption(context, "ClassName") ?? "Resources", 
+                    resources);
+
+                context.AddSource(
+                    "H.Resources", 
+                    SourceText.From(code, Encoding.UTF8));
             }
             catch (Exception exception)
             {
@@ -52,14 +59,25 @@ namespace H.Resources.Generator
 
         #region Utilities
 
-        private static bool TryGetGlobalOption(GeneratorExecutionContext context, string name, out string? result)
+        private static string? GetGlobalOption(GeneratorExecutionContext context, string name)
         {
-            return context.AnalyzerConfigOptions.GlobalOptions.TryGetValue($"build_property.{name}", out result);
+            return context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
+                $"build_property.HResourcesGenerator_{name}", 
+                out var result)
+                ? result
+                : null;
         }
 
-        private static bool TryGetOption(GeneratorExecutionContext context, string name, AdditionalText obj, out string? result)
+        private static string? GetOption(
+            GeneratorExecutionContext context, 
+            string name, 
+            AdditionalText text)
         {
-            return context.AnalyzerConfigOptions.GetOptions(obj).TryGetValue($"build_property.{name}", out result);
+            return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
+                $"build_property.HResourcesGenerator_{name}", 
+                out var result)
+                ? result
+                : null;
         }
 
         #endregion
