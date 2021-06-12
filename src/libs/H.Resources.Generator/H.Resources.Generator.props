@@ -1,6 +1,13 @@
 ﻿<Project>
 
   <ItemGroup>
+    <CompilerVisibleProperty Include="HResourcesGenerator_Namespace"/>
+    <CompilerVisibleProperty Include="HResourcesGenerator_Modifier"/>
+    <CompilerVisibleProperty Include="HResourcesGenerator_ClassName"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Type" />
   </ItemGroup>
 
 </Project>
