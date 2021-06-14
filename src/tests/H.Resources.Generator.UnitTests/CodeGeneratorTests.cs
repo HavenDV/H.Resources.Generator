@@ -14,22 +14,22 @@ namespace H.Resources.Generator.UnitTests
                 new Resource
                 {
                     Path = "path1.png", 
-                    Type = "Image",
+                    Type = ResourceType.Image,
                 },
                 new Resource
                 {
                     Path = "path with whitespaces.png",
-                    Type = "Image",
+                    Type = ResourceType.Image,
                 },
                 new Resource
                 {
                     Path = "path3.png",
-                    Type = "Stream",
+                    Type = ResourceType.Stream,
                 },
                 new Resource
                 {
                     Path = "path4.txt",
-                    Type = "String",
+                    Type = ResourceType.String,
                 },
             });
 

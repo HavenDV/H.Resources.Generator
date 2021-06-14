@@ -20,9 +20,12 @@ namespace H.Resources.Generator
                     .Select(value => new Resource
                     {
                         Path = value.Path,
-                        Type = 
-                            GetOption(context, nameof(Resource.Type), value) ?? 
-                            CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path)),
+                        Type = Enum.TryParse<ResourceType>(
+                            GetOption(context, nameof(Resource.Type), value) ?? string.Empty,
+                            true,
+                            out var result) 
+                            ? result 
+                            : CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path)),
                     })
                     .ToArray();
 

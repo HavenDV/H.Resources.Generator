@@ -9,15 +9,15 @@ namespace H.Resources.Generator
     {
         #region Methods
 
-        public static string GetTypeByExtension(string extension)
+        public static ResourceType GetTypeByExtension(string extension)
         {
             return extension switch
             {
-                ".png" => "Image",
-                ".txt" => "String",
-                ".nswag" => "String",
-                ".log" => "String",
-                _ => "Bytes",
+                ".png" => ResourceType.Image,
+                ".txt" => ResourceType.String,
+                ".nswag" => ResourceType.String,
+                ".log" => ResourceType.String,
+                _ => ResourceType.Bytes,
             };
         }
 
@@ -27,7 +27,8 @@ namespace H.Resources.Generator
             string className, 
             IReadOnlyCollection<Resource> resources)
         {
-            var withSystemDrawing = resources.Any(static resource => resource.Type == "Image");
+            var withSystemDrawing = resources
+                .Any(static resource => resource.Type == ResourceType.Image);
 
             var properties = resources
                 .Select(static resource => new GeneratedProperty
@@ -37,16 +38,16 @@ namespace H.Resources.Generator
                         .Replace(" ", "_"),
                     Type = resource.Type switch
                     {
-                        "Image" => "System.Drawing.Image",
-                        "Stream" => "System.IO.Stream",
-                        "String" => "string",
+                        ResourceType.Image => "System.Drawing.Image",
+                        ResourceType.Stream => "System.IO.Stream",
+                        ResourceType.String => "string",
                         _ => "byte[]",
                     },
                     Method = resource.Type switch
                     {
-                        "Image" => "GetBitmap",
-                        "Stream" => "ReadFileAsStream",
-                        "String" => "ReadFileAsString",
+                        ResourceType.Image => "GetBitmap",
+                        ResourceType.Stream => "ReadFileAsStream",
+                        ResourceType.String => "ReadFileAsString",
                         _ => "ReadFileAsBytes",
                     },
                     FileName = Path.GetFileName(resource.Path),
