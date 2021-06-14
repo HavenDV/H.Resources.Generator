@@ -26,6 +26,11 @@ namespace H.Resources.Generator.UnitTests
                     Path = "path3.png",
                     Type = "Stream",
                 },
+                new Resource
+                {
+                    Path = "path4.txt",
+                    Type = "String",
+                },
             });
 
             code.Should().Be(@"
@@ -95,6 +100,27 @@ namespace H
             return memoryStream.ToArray();
         }
 
+        /// <summary>
+        /// Searches for a file among Embedded resources <br/>
+        /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
+        /// <![CDATA[Version: 1.0.0.2]]> <br/>
+        /// <![CDATA[Dependency: ReadFileAsStream(string name, Assembly? assembly = null)]]> <br/>
+        /// </summary>
+        /// <param name=""name""></param>
+        /// <param name=""assembly""></param>
+        /// <exception cref=""ArgumentNullException""></exception>
+        /// <exception cref=""ArgumentException""></exception>
+        /// <returns></returns>
+        public static string ReadFileAsString(string name, Assembly? assembly = null)
+        {
+            name = name ?? throw new ArgumentNullException(nameof(name));
+
+            using var stream = ReadFileAsStream(name, assembly);
+            using var reader = new StreamReader(stream);
+
+            return reader.ReadToEnd();
+        }
+
         private static System.Drawing.Image GetBitmap(string name)
         {
             using var stream = ReadFileAsStream(name);
@@ -105,6 +131,7 @@ namespace H
         public static System.Drawing.Image path1 => GetBitmap(""path1.png"");
         public static System.Drawing.Image path_with_whitespaces => GetBitmap(""path with whitespaces.png"");
         public static System.IO.Stream path3 => ReadFileAsStream(""path3.png"");
+        public static string path4 => ReadFileAsString(""path4.txt"");
     }
 }
 ");

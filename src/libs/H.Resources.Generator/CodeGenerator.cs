@@ -14,6 +14,9 @@ namespace H.Resources.Generator
             return extension switch
             {
                 ".png" => "Image",
+                ".txt" => "String",
+                ".nswag" => "String",
+                ".log" => "String",
                 _ => "Bytes",
             };
         }
@@ -36,12 +39,14 @@ namespace H.Resources.Generator
                     {
                         "Image" => "System.Drawing.Image",
                         "Stream" => "System.IO.Stream",
+                        "String" => "string",
                         _ => "byte[]",
                     },
                     Method = resource.Type switch
                     {
                         "Image" => "GetBitmap",
                         "Stream" => "ReadFileAsStream",
+                        "String" => "ReadFileAsString",
                         _ => "ReadFileAsBytes",
                     },
                     FileName = Path.GetFileName(resource.Path),
@@ -114,7 +119,28 @@ namespace {@namespace}
 
             return memoryStream.ToArray();
         }}
-{(withSystemDrawing ? @"
+
+        /// <summary>
+        /// Searches for a file among Embedded resources <br/>
+        /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
+        /// <![CDATA[Version: 1.0.0.2]]> <br/>
+        /// <![CDATA[Dependency: ReadFileAsStream(string name, Assembly? assembly = null)]]> <br/>
+        /// </summary>
+        /// <param name=""name""></param>
+        /// <param name=""assembly""></param>
+        /// <exception cref=""ArgumentNullException""></exception>
+        /// <exception cref=""ArgumentException""></exception>
+        /// <returns></returns>
+        public static string ReadFileAsString(string name, Assembly? assembly = null)
+        {{
+            name = name ?? throw new ArgumentNullException(nameof(name));
+
+            using var stream = ReadFileAsStream(name, assembly);
+            using var reader = new StreamReader(stream);
+
+            return reader.ReadToEnd();
+        }}
+{ (withSystemDrawing ? @"
         private static System.Drawing.Image GetBitmap(string name)
         {
             using var stream = ReadFileAsStream(name);

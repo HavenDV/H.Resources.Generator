@@ -37,6 +37,7 @@ You can set up type explicitly:
 Supported types:
 - Image(System.Drawing.Image)
 - Stream(System.IO.Stream)
+- String(string)
 - Bytes(byte[])
 
 Global options(Default values are provided and can be omitted):
