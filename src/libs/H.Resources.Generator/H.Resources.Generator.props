@@ -10,4 +10,13 @@
     <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Type" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
+    <EmbeddedResource Include="Resources\*.*" />
+    <AdditionalFiles Include="Resources\*.*" />
+  </ItemGroup>
+
 </Project>

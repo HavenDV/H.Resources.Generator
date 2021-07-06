@@ -49,5 +49,14 @@ Global options(Default values are provided and can be omitted):
 </PropertyGroup>
 ```
 
+By default, it includes this code:
+```xml
+<ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
+  <EmbeddedResource Include="Resources\*.*" />
+  <AdditionalFiles Include="Resources\*.*" />
+</ItemGroup>
+```
+You can disable this behavior with `<HResourcesGenerator_AddResourcesFolder>false</HResourcesGenerator_AddResourcesFolder>`
+
 ### Contacts
 * [mail](mailto:havendv@gmail.com)
