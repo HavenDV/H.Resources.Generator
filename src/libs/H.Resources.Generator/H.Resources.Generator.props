@@ -15,8 +15,8 @@
   </PropertyGroup>
   
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
-    <EmbeddedResource Include="Resources\*.*" />
-    <AdditionalFiles Include="Resources\*.*" />
+    <EmbeddedResource Include="Resources\**\*.*" />
+    <AdditionalFiles Include="Resources\**\*.*" />
   </ItemGroup>
 
 </Project>
