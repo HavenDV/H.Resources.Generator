@@ -33,8 +33,9 @@ namespace H.Resources.Generator
             var properties = resources
                 .Select(static resource => new GeneratedProperty
                 {
-                    Name = Path.GetFileNameWithoutExtension(resource.Path)
+                    Name = Path.GetFileName(resource.Path)
                         .Replace("-", string.Empty)
+                        .Replace(".", "_")
                         .Replace(" ", "_"),
                     Type = resource.Type switch
                     {
