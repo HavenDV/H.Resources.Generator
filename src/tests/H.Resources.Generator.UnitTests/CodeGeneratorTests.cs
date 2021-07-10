@@ -128,10 +128,10 @@ namespace H
             return System.Drawing.Image.FromStream(stream);
         }
 
-        public static System.Drawing.Image path1 => GetBitmap(""path1.png"");
-        public static System.Drawing.Image path_with_whitespaces => GetBitmap(""path with whitespaces.png"");
-        public static System.IO.Stream path3 => ReadFileAsStream(""path3.png"");
-        public static string path4 => ReadFileAsString(""path4.txt"");
+        public static System.Drawing.Image path1_png => GetBitmap(""path1.png"");
+        public static System.Drawing.Image path_with_whitespaces_png => GetBitmap(""path with whitespaces.png"");
+        public static System.IO.Stream path3_png => ReadFileAsStream(""path3.png"");
+        public static string path4_txt => ReadFileAsString(""path4.txt"");
     }
 }
 ");
