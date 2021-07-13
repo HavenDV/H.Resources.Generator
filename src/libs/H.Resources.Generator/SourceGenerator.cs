@@ -16,13 +16,6 @@ namespace H.Resources.Generator
         {
             try
             {
-                var defaultType = Enum.TryParse<ResourceType>(
-                    GetGlobalOption(context, "DefaultType") ?? "Auto",
-                    true,
-                    out var result)
-                    ? result
-                    : ResourceType.Auto;
-
                 var resources = context.AdditionalFiles
                     .Select(value => new Resource
                     {
@@ -30,11 +23,9 @@ namespace H.Resources.Generator
                         Type = Enum.TryParse<ResourceType>(
                             GetOption(context, nameof(Resource.Type), value) ?? string.Empty,
                             true,
-                            out var result) 
+                            out var result) && result is not ResourceType.Auto
                             ? result 
-                            : defaultType == ResourceType.Auto
-                                ? CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path))
-                                : defaultType,
+                            : CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path)),
                     })
                     .ToArray();
 
