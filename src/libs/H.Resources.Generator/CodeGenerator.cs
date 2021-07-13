@@ -41,7 +41,7 @@ namespace {@namespace}
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        private static System.IO.Stream AsStream(Assembly? assembly = null)
+        private System.IO.Stream AsStream(Assembly? assembly = null)
         {{
             assembly ??= Assembly.GetExecutingAssembly();
 
@@ -70,7 +70,7 @@ namespace {@namespace}
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        public static byte[] AsBytes(Assembly? assembly = null)
+        public byte[] AsBytes(Assembly? assembly = null)
         {{
             using var stream = AsStream(FileName, assembly);
             using var memoryStream = new MemoryStream();
@@ -88,7 +88,7 @@ namespace {@namespace}
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        public static string AsString(Assembly? assembly = null)
+        public string AsString(Assembly? assembly = null)
         {{
             using var stream = AsStream(FileName, assembly);
             using var reader = new StreamReader(stream);
@@ -96,7 +96,7 @@ namespace {@namespace}
             return reader.ReadToEnd();
         }}
 { (withSystemDrawing ? @"
-        private static System.Drawing.Image AsBitmap(Assembly? assembly = null)
+        private System.Drawing.Image AsBitmap(Assembly? assembly = null)
         {
             using var stream = AsStream(FileName, assembly);
 
