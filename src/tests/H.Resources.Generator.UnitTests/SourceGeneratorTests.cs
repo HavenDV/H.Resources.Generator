@@ -50,7 +50,10 @@ namespace MyCode
 {tree.GetText()}");
             }
 
-            outputCompilation.GetDiagnostics().Should().HaveCount(1);
+            foreach (var diagnostic in outputCompilation.GetDiagnostics())
+            {
+                Console.WriteLine($"{diagnostic}");
+            }
         }
     }
 }
