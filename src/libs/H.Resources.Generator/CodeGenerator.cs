@@ -72,7 +72,7 @@ namespace {@namespace}
         /// <returns></returns>
         public byte[] AsBytes(Assembly? assembly = null)
         {{
-            using var stream = AsStream(FileName, assembly);
+            using var stream = AsStream(assembly);
             using var memoryStream = new MemoryStream();
 
             stream.CopyTo(memoryStream);
@@ -90,7 +90,7 @@ namespace {@namespace}
         /// <returns></returns>
         public string AsString(Assembly? assembly = null)
         {{
-            using var stream = AsStream(FileName, assembly);
+            using var stream = AsStream(assembly);
             using var reader = new StreamReader(stream);
 
             return reader.ReadToEnd();
@@ -98,7 +98,7 @@ namespace {@namespace}
 { (withSystemDrawing ? @"
         private System.Drawing.Image AsBitmap(Assembly? assembly = null)
         {
-            using var stream = AsStream(FileName, assembly);
+            using var stream = AsStream(assembly);
 
             return System.Drawing.Image.FromStream(stream);
         }
