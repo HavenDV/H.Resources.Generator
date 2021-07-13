@@ -16,36 +16,28 @@ Install-Package H.Resources.Generator
 ### Usage
 
 ```xml
+<PropertyGroup>
+  <HResourcesGenerator_WithSystemDrawing>true</HResourcesGenerator_WithSystemDrawing>
+</PropertyGroup>
+
 <ItemGroup Label="Images">
   <EmbeddedResource Include="Images\*.png" />
-  <AdditionalFiles Include="Images\*.png" /> // It creates System.Drawing.Image properties
+  <AdditionalFiles Include="Images\*.png" />
 </ItemGroup>
 ```
 
 After it, use resource in code:
 ```cs
-var image = H.Resources.ImageName;
+var image = H.Resources.image_name_png.AsImage();
+// or
+var bytes = H.Resources.image_name_png.AsBytes();
 ```
 
-You can set up type explicitly:
-```xml
-<AdditionalFiles Include="Images\*.png" HResourcesGenerator_Type="Bytes" /> // It creates byte[] properties
-```
-
-Supported types:
-- Image(System.Drawing.Image)
-- Stream(System.IO.Stream)
-- String(string)
-- Bytes(byte[])
-- Auto(detection by extension)
-
-| Extension   | Type        |
-| ----------- | ----------- |
-| .png        | Image       |
-| .txt        | String      |
-| .nswag      | String      |
-| .log        | String      |
-| .*          | Bytes       |
+Available methods:
+- System.Drawing.Image AsImage() (only if `HResourcesGenerator_WithSystemDrawing` is true)
+- System.IO.Stream AsStream()
+- string AsString()
+- byte[] AsBytes()
 
 Global options(Default values are provided and can be omitted):
 ```xml
@@ -54,7 +46,7 @@ Global options(Default values are provided and can be omitted):
   <HResourcesGenerator_Modifier>internal</HResourcesGenerator_Modifier>
   <HResourcesGenerator_ClassName>Resources</HResourcesGenerator_ClassName>
   <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
-  <HResourcesGenerator_DefaultType>Auto</HResourcesGenerator_DefaultType>
+  <HResourcesGenerator_WithSystemDrawing>false</HResourcesGenerator_WithSystemDrawing>
 </PropertyGroup>
 ```
 
@@ -62,7 +54,7 @@ By default, it includes this code:
 ```xml
 <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
   <EmbeddedResource Include="Resources\**\*.*" />
-  <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Type="$(HResourcesGenerator_DefaultType)" />
+  <AdditionalFiles Include="Resources\**\*.*" />
 </ItemGroup>
 ```
 You can disable this behavior with `<HResourcesGenerator_AddResourcesFolder>false</HResourcesGenerator_AddResourcesFolder>`

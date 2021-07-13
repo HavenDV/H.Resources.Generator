@@ -1,8 +1,14 @@
-﻿namespace H.Resources.Generator
+﻿using System;
+
+namespace H.Resources.Generator
 {
     public class Resource
     {
         public string Path { get; set; } = string.Empty;
-        public ResourceType Type { get; set; }
+
+        public Resource(string path)
+        {
+            Path = path ?? throw new ArgumentNullException(nameof(path));
+        }
     }
 }

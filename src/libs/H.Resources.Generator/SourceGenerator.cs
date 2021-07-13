@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -16,28 +15,25 @@ namespace H.Resources.Generator
         {
             try
             {
-                var resources = context.AdditionalFiles
-                    .Select(value => new Resource
-                    {
-                        Path = value.Path,
-                        Type = Enum.TryParse<ResourceType>(
-                            GetOption(context, nameof(Resource.Type), value) ?? string.Empty,
-                            true,
-                            out var result) && result is not ResourceType.Auto
-                            ? result 
-                            : CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path)),
-                    })
-                    .ToArray();
-
-                var code = CodeGenerator.Generate(
-                    GetGlobalOption(context, "Namespace") ?? "H",
-                    GetGlobalOption(context, "Modifier") ?? "internal",
-                    GetGlobalOption(context, "ClassName") ?? "Resources", 
-                    resources);
-
+                context.AddSource(
+                    "H.Resource",
+                    SourceText.From(
+                        CodeGenerator.GenerateResource(
+                            GetGlobalOption(context, "Namespace") ?? "H",
+                            GetGlobalOption(context, "Modifier") ?? "internal",
+                            bool.Parse(GetGlobalOption(context, "WithSystemDrawing") ?? "false")), 
+                        Encoding.UTF8));
                 context.AddSource(
                     "H.Resources", 
-                    SourceText.From(code, Encoding.UTF8));
+                    SourceText.From(
+                        CodeGenerator.GenerateResources(
+                            GetGlobalOption(context, "Namespace") ?? "H",
+                            GetGlobalOption(context, "Modifier") ?? "internal",
+                            GetGlobalOption(context, "ClassName") ?? "Resources",
+                            context.AdditionalFiles
+                                .Select(value => new Resource(value.Path))
+                                .ToArray()), 
+                        Encoding.UTF8));
             }
             catch (Exception exception)
             {
@@ -72,18 +68,18 @@ namespace H.Resources.Generator
                 : null;
         }
 
-        private static string? GetOption(
-            GeneratorExecutionContext context, 
-            string name, 
-            AdditionalText text)
-        {
-            return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
-                $"build_metadata.AdditionalFiles.HResourcesGenerator_{name}", 
-                out var result) &&
-                !string.IsNullOrWhiteSpace(result)
-                ? result
-                : null;
-        }
+        //private static string? GetOption(
+        //    GeneratorExecutionContext context, 
+        //    string name, 
+        //    AdditionalText text)
+        //{
+        //    return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
+        //        $"build_metadata.AdditionalFiles.HResourcesGenerator_{name}", 
+        //        out var result) &&
+        //        !string.IsNullOrWhiteSpace(result)
+        //        ? result
+        //        : null;
+        //}
 
         #endregion
     }

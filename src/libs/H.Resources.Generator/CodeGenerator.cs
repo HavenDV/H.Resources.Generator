@@ -9,52 +9,11 @@ namespace H.Resources.Generator
     {
         #region Methods
 
-        public static ResourceType GetTypeByExtension(string extension)
+        public static string GenerateResource(
+            string @namespace,
+            string modifier,
+            bool withSystemDrawing)
         {
-            return extension switch
-            {
-                ".png" => ResourceType.Image,
-                ".txt" => ResourceType.String,
-                ".nswag" => ResourceType.String,
-                ".log" => ResourceType.String,
-                _ => ResourceType.Bytes,
-            };
-        }
-
-        public static string Generate(
-            string @namespace, 
-            string modifier, 
-            string className, 
-            IReadOnlyCollection<Resource> resources)
-        {
-            var withSystemDrawing = resources
-                .Any(static resource => resource.Type == ResourceType.Image);
-
-            var properties = resources
-                .Select(static resource => new GeneratedProperty
-                {
-                    Name = Path.GetFileName(resource.Path)
-                        .Replace("-", string.Empty)
-                        .Replace(".", "_")
-                        .Replace(" ", "_"),
-                    Type = resource.Type switch
-                    {
-                        ResourceType.Image => "System.Drawing.Image",
-                        ResourceType.Stream => "System.IO.Stream",
-                        ResourceType.String => "string",
-                        _ => "byte[]",
-                    },
-                    Method = resource.Type switch
-                    {
-                        ResourceType.Image => "GetBitmap",
-                        ResourceType.Stream => "ReadFileAsStream",
-                        ResourceType.String => "ReadFileAsString",
-                        _ => "ReadFileAsBytes",
-                    },
-                    FileName = Path.GetFileName(resource.Path),
-                })
-                .ToArray();
-
             return @$"
 using System;
 using System.IO;
@@ -65,21 +24,25 @@ using System.Reflection;
 
 namespace {@namespace}
 {{
-    {modifier} static class {className}
+    {modifier} class Resource
     {{
+        public string FileName {{ get;set; }}
+
+        public Resource(string fileName)
+        {{
+            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+        }}
+
         /// <summary>
         /// Searches for a file among Embedded resources <br/>
         /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
-        /// <![CDATA[Version: 1.0.0.4]]> <br/>
         /// </summary>
-        /// <param name=""name""></param>
         /// <param name=""assembly""></param>
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        private static System.IO.Stream ReadFileAsStream(string name, Assembly? assembly = null)
+        private static System.IO.Stream AsStream(Assembly? assembly = null)
         {{
-            name = name ?? throw new ArgumentNullException(nameof(name));
             assembly ??= Assembly.GetExecutingAssembly();
 
             try
@@ -87,8 +50,8 @@ namespace {@namespace}
                 return assembly.GetManifestResourceStream(
                            assembly
                                .GetManifestResourceNames()
-                               .Single(resourceName => resourceName.EndsWith(name, StringComparison.InvariantCultureIgnoreCase)))
-                       ?? throw new ArgumentException($""\""{{name}}\"" is not found in embedded resources"");
+                               .Single(resourceName => resourceName.EndsWith(FileName, StringComparison.InvariantCultureIgnoreCase)))
+                       ?? throw new ArgumentException($""\""{{FileName}}\"" is not found in embedded resources"");
             }}
             catch (InvalidOperationException exception)
             {{
@@ -102,19 +65,14 @@ namespace {@namespace}
         /// <summary>
         /// Searches for a file among Embedded resources <br/>
         /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
-        /// <![CDATA[Version: 1.0.0.2]]> <br/>
-        /// <![CDATA[Dependency: ReadFileAsStream(string name, Assembly? assembly = null)]]> <br/>
         /// </summary>
-        /// <param name=""name""></param>
         /// <param name=""assembly""></param>
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        public static byte[] ReadFileAsBytes(string name, Assembly? assembly = null)
+        public static byte[] AsBytes(Assembly? assembly = null)
         {{
-            name = name ?? throw new ArgumentNullException(nameof(name));
-
-            using var stream = ReadFileAsStream(name, assembly);
+            using var stream = AsStream(FileName, assembly);
             using var memoryStream = new MemoryStream();
 
             stream.CopyTo(memoryStream);
@@ -125,34 +83,58 @@ namespace {@namespace}
         /// <summary>
         /// Searches for a file among Embedded resources <br/>
         /// Throws an <see cref=""ArgumentException""/> if nothing is found or more than one match is found <br/>
-        /// <![CDATA[Version: 1.0.0.2]]> <br/>
-        /// <![CDATA[Dependency: ReadFileAsStream(string name, Assembly? assembly = null)]]> <br/>
         /// </summary>
-        /// <param name=""name""></param>
         /// <param name=""assembly""></param>
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        public static string ReadFileAsString(string name, Assembly? assembly = null)
+        public static string AsString(Assembly? assembly = null)
         {{
-            name = name ?? throw new ArgumentNullException(nameof(name));
-
-            using var stream = ReadFileAsStream(name, assembly);
+            using var stream = AsStream(FileName, assembly);
             using var reader = new StreamReader(stream);
 
             return reader.ReadToEnd();
         }}
 { (withSystemDrawing ? @"
-        private static System.Drawing.Image GetBitmap(string name)
+        private static System.Drawing.Image AsBitmap(Assembly? assembly = null)
         {
-            using var stream = ReadFileAsStream(name);
+            using var stream = AsStream(FileName, assembly);
 
             return System.Drawing.Image.FromStream(stream);
         }
 " : "")}
+    }}
+}}
+";
+        }
+
+        public static string GenerateResources(
+            string @namespace, 
+            string modifier, 
+            string className,
+            IReadOnlyCollection<Resource> resources)
+        {
+            var properties = resources
+                .Select(static resource => (
+                
+                    name: Path.GetFileName(resource.Path)
+                        .Replace("-", string.Empty)
+                        .Replace(".", "_")
+                        .Replace(" ", "_"),
+                    fileName: Path.GetFileName(resource.Path)
+                ))
+                .ToArray();
+
+            return @$"
+#nullable enable
+
+namespace {@namespace}
+{{
+    {modifier} static class {className}
+    {{
 {
 string.Join(Environment.NewLine, properties.Select(static resource =>
-$"        public static {resource.Type} {resource.Name} => {resource.Method}(\"{resource.FileName}\");"))
+$"        public static Resource {resource.name} => new Resource(\"{resource.fileName}\");"))
 }
     }}
 }}

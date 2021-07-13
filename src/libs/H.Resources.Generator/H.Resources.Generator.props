@@ -5,21 +5,21 @@
     <CompilerVisibleProperty Include="HResourcesGenerator_Modifier"/>
     <CompilerVisibleProperty Include="HResourcesGenerator_ClassName"/>
     <CompilerVisibleProperty Include="HResourcesGenerator_AddResourcesFolder"/>
-    <CompilerVisibleProperty Include="HResourcesGenerator_DefaultType"/>
+    <CompilerVisibleProperty Include="HResourcesGenerator_WithSystemDrawing"/>
   </ItemGroup>
 
   <ItemGroup>
-    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Type" />
+    <!--<CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Type" />-->
   </ItemGroup>
 
   <PropertyGroup>
     <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
-    <HResourcesGenerator_DefaultType>Auto</HResourcesGenerator_DefaultType>
+    <HResourcesGenerator_WithSystemDrawing>false</HResourcesGenerator_WithSystemDrawing>
   </PropertyGroup>
   
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
     <EmbeddedResource Include="Resources\**\*.*" />
-    <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Type="$(HResourcesGenerator_DefaultType)" />
+    <AdditionalFiles Include="Resources\**\*.*" />
   </ItemGroup>
 
 </Project>
