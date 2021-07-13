@@ -2,6 +2,7 @@
 {
     public enum ResourceType
     {
+        Auto,
         Bytes,
         Stream,
         String,

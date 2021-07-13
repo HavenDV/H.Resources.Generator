@@ -5,8 +5,6 @@
 [![Requirements](https://img.shields.io/badge/Requirements-.NET%20Standard%202.0-blue.svg)](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md)
 [![Build Status](https://github.com/HavenDV/H.Resources.Generator/workflows/.NET/badge.svg?branch=master)](https://github.com/HavenDV/H.Resources.Generator/actions?query=workflow%3A%22.NET%22)
 
-Description
-
 ### Nuget
 
 [![NuGet](https://img.shields.io/nuget/dt/H.Resources.Generator.svg?style=flat-square&label=H.Resources.Generator)](https://www.nuget.org/packages/H.Resources.Generator/)
@@ -39,6 +37,15 @@ Supported types:
 - Stream(System.IO.Stream)
 - String(string)
 - Bytes(byte[])
+- Auto(detection by extension)
+
+| Extension   | Type        |
+| ----------- | ----------- |
+| .png        | Image       |
+| .txt        | String      |
+| .nswag      | String      |
+| .log        | String      |
+| .*          | Bytes       |
 
 Global options(Default values are provided and can be omitted):
 ```xml
@@ -47,7 +54,7 @@ Global options(Default values are provided and can be omitted):
   <HResourcesGenerator_Modifier>internal</HResourcesGenerator_Modifier>
   <HResourcesGenerator_ClassName>Resources</HResourcesGenerator_ClassName>
   <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
-  <HResourcesGenerator_AutoDetect>true</HResourcesGenerator_AutoDetect> <!-- When false, generates only byte[] properties. -->
+  <HResourcesGenerator_DefaultType>Auto</HResourcesGenerator_DefaultType>
 </PropertyGroup>
 ```
 
@@ -55,7 +62,7 @@ By default, it includes this code:
 ```xml
 <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
   <EmbeddedResource Include="Resources\**\*.*" />
-  <AdditionalFiles Include="Resources\**\*.*" />
+  <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Type="$(HResourcesGenerator_DefaultType)" />
 </ItemGroup>
 ```
 You can disable this behavior with `<HResourcesGenerator_AddResourcesFolder>false</HResourcesGenerator_AddResourcesFolder>`

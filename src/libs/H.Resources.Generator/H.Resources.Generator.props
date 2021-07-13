@@ -4,6 +4,8 @@
     <CompilerVisibleProperty Include="HResourcesGenerator_Namespace"/>
     <CompilerVisibleProperty Include="HResourcesGenerator_Modifier"/>
     <CompilerVisibleProperty Include="HResourcesGenerator_ClassName"/>
+    <CompilerVisibleProperty Include="HResourcesGenerator_AddResourcesFolder"/>
+    <CompilerVisibleProperty Include="HResourcesGenerator_DefaultType"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -12,12 +14,12 @@
 
   <PropertyGroup>
     <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
-    <HResourcesGenerator_AutoDetect>true</HResourcesGenerator_AutoDetect>
+    <HResourcesGenerator_DefaultType>Auto</HResourcesGenerator_DefaultType>
   </PropertyGroup>
   
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
     <EmbeddedResource Include="Resources\**\*.*" />
-    <AdditionalFiles Include="Resources\**\*.*" />
+    <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Type="$(HResourcesGenerator_DefaultType)" />
   </ItemGroup>
 
 </Project>

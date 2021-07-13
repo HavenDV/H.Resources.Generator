@@ -16,20 +16,25 @@ namespace H.Resources.Generator
         {
             try
             {
-                var autoDetect = bool.Parse(GetGlobalOption(context, "AutoDetect") ?? "true");
+                var defaultType = Enum.TryParse<ResourceType>(
+                    GetGlobalOption(context, "DefaultType") ?? "Auto",
+                    true,
+                    out var result)
+                    ? result
+                    : ResourceType.Auto;
 
                 var resources = context.AdditionalFiles
                     .Select(value => new Resource
                     {
                         Path = value.Path,
-                        Type = autoDetect
-                            ? Enum.TryParse<ResourceType>(
-                                GetOption(context, nameof(Resource.Type), value) ?? string.Empty,
-                                true,
-                                out var result) 
-                                ? result 
-                                : CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path))
-                            : ResourceType.Bytes,
+                        Type = Enum.TryParse<ResourceType>(
+                            GetOption(context, nameof(Resource.Type), value) ?? string.Empty,
+                            true,
+                            out var result) 
+                            ? result 
+                            : defaultType == ResourceType.Auto
+                                ? CodeGenerator.GetTypeByExtension(Path.GetExtension(value.Path))
+                                : defaultType,
                     })
                     .ToArray();
 
