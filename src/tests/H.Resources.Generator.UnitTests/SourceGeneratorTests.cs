@@ -43,12 +43,14 @@ namespace MyCode
             diagnostics.Should().BeEmpty();
             outputCompilation.SyntaxTrees.Should().HaveCount(3);
 
-            foreach(var tree in outputCompilation.SyntaxTrees)
+            foreach (var tree in outputCompilation.SyntaxTrees)
             {
                 Console.WriteLine($@"
 {tree.FilePath}
 {tree.GetText()}");
             }
+
+            outputCompilation.GetDiagnostics().Should().HaveCount(1);
         }
     }
 }
