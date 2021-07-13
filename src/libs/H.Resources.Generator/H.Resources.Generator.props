@@ -12,6 +12,7 @@
 
   <PropertyGroup>
     <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
+    <HResourcesGenerator_AutoDetect>true</HResourcesGenerator_AutoDetect>
   </PropertyGroup>
   
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">

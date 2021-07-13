@@ -46,6 +46,8 @@ Global options(Default values are provided and can be omitted):
   <HResourcesGenerator_Namespace>H</HResourcesGenerator_Namespace>
   <HResourcesGenerator_Modifier>internal</HResourcesGenerator_Modifier>
   <HResourcesGenerator_ClassName>Resources</HResourcesGenerator_ClassName>
+  <HResourcesGenerator_AddResourcesFolder>true</HResourcesGenerator_AddResourcesFolder>
+  <HResourcesGenerator_AutoDetect>true</HResourcesGenerator_AutoDetect> <!-- When false, generates only byte[] properties. -->
 </PropertyGroup>
 ```
 
