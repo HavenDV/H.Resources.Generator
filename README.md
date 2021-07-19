@@ -59,5 +59,8 @@ By default, it includes this code:
 ```
 You can disable this behavior with `<HResourcesGenerator_AddResourcesFolder>false</HResourcesGenerator_AddResourcesFolder>`
 
+### Alternatives
+- [Resourcer.Fody](https://github.com/Fody/Resourcer)
+
 ### Contacts
 * [mail](mailto:havendv@gmail.com)
