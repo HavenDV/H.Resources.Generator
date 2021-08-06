@@ -41,7 +41,7 @@ namespace {@namespace}
         /// <exception cref=""ArgumentNullException""></exception>
         /// <exception cref=""ArgumentException""></exception>
         /// <returns></returns>
-        private System.IO.Stream AsStream(Assembly? assembly = null)
+        public System.IO.Stream AsStream(Assembly? assembly = null)
         {{
             assembly ??= Assembly.GetExecutingAssembly();
 
@@ -96,7 +96,7 @@ namespace {@namespace}
             return reader.ReadToEnd();
         }}
 { (withSystemDrawing ? @"
-        private System.Drawing.Image AsBitmap(Assembly? assembly = null)
+        public System.Drawing.Image AsBitmap(Assembly? assembly = null)
         {
             using var stream = AsStream(assembly);
 
