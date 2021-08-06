@@ -21,7 +21,8 @@ jobs:
 
     - name: Generate build number
       if: contains(join(github.event.commits.*.message), 'fix:') || 
-          contains(join(github.event.commits.*.message), 'feat:')
+          contains(join(github.event.commits.*.message), 'feat:') || 
+          contains(join(github.event.commits.*.message), 'perf:')
       uses: einaregilsson/build-number@v3
       with:
         token: ${{ secrets.github_token }}  
@@ -50,7 +51,8 @@ jobs:
         
     - name: Publish
       if: contains(join(github.event.commits.*.message), 'fix:') || 
-          contains(join(github.event.commits.*.message), 'feat:')
+          contains(join(github.event.commits.*.message), 'feat:') || 
+          contains(join(github.event.commits.*.message), 'perf:')
       run: dotnet nuget push
         src\**.nupkg
         --api-key ${{ secrets.NUGET_KEY }}
