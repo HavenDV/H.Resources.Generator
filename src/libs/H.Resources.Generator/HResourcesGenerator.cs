@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace H.Resources.Generator
 {
     [Generator]
-    public class SourceGenerator : ISourceGenerator
+    public class HResourcesGenerator : ISourceGenerator
     {
         #region Methods
 
@@ -61,7 +61,7 @@ namespace H.Resources.Generator
         private static string? GetGlobalOption(GeneratorExecutionContext context, string name)
         {
             return context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
-                $"build_property.HResourcesGenerator_{name}", 
+                $"build_property.{nameof(HResourcesGenerator)}_{name}", 
                 out var result) &&
                 !string.IsNullOrWhiteSpace(result)
                 ? result
@@ -74,7 +74,7 @@ namespace H.Resources.Generator
         //    AdditionalText text)
         //{
         //    return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
-        //        $"build_metadata.AdditionalFiles.HResourcesGenerator_{name}", 
+        //        $"build_metadata.AdditionalFiles.{nameof(HResourcesGenerator)}_{name}", 
         //        out var result) &&
         //        !string.IsNullOrWhiteSpace(result)
         //        ? result

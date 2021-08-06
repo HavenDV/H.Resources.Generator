@@ -32,7 +32,7 @@ namespace MyCode
                 },
                 new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
-            var generator = new SourceGenerator();
+            var generator = new HResourcesGenerator();
             var driver = (GeneratorDriver)CSharpGeneratorDriver.Create(generator);
 
             driver.RunGeneratorsAndUpdateCompilation(
