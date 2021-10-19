@@ -1,21 +1,18 @@
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace H.Resources.Generator.UnitTests;
 
-namespace H.Resources.Generator.UnitTests
+[TestClass]
+public class CodeGeneratorTests
 {
-    [TestClass]
-    public class CodeGeneratorTests
+    [TestMethod]
+    public void GenerateTest()
     {
-        [TestMethod]
-        public void GenerateTest()
+        var code = CodeGenerator.GenerateResources("H", "internal", "Resources", new[]
         {
-            var code = CodeGenerator.GenerateResources("H", "internal", "Resources", new[]
-            {
                 new Resource("path1.png"),
                 new Resource("path with whitespaces.png"),
             });
 
-            code.Should().Be(@"
+        code.Should().Be(@"
 #nullable enable
 
 namespace H
@@ -27,6 +24,5 @@ namespace H
     }
 }
 ");
-        }
     }
 }

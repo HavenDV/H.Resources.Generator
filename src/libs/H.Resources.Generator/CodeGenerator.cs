@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿namespace H.Resources.Generator;
 
-namespace H.Resources.Generator
+public static class CodeGenerator
 {
-    public static class CodeGenerator
-    {
-        #region Methods
+    #region Methods
 
-        public static string GenerateResource(
-            string @namespace,
-            string modifier,
-            bool withSystemDrawing)
-        {
-            return @$"
+    public static string GenerateResource(
+        string @namespace,
+        string modifier,
+        bool withSystemDrawing)
+    {
+        return @$"
 using System;
 using System.IO;
 using System.Linq;
@@ -106,26 +101,26 @@ namespace {@namespace}
     }}
 }}
 ";
-        }
+    }
 
-        public static string GenerateResources(
-            string @namespace, 
-            string modifier, 
-            string className,
-            IReadOnlyCollection<Resource> resources)
-        {
-            var properties = resources
-                .Select(static resource => (
-                
-                    name: Path.GetFileName(resource.Path)
-                        .Replace("-", string.Empty)
-                        .Replace(".", "_")
-                        .Replace(" ", "_"),
-                    fileName: Path.GetFileName(resource.Path)
-                ))
-                .ToArray();
+    public static string GenerateResources(
+        string @namespace,
+        string modifier,
+        string className,
+        IReadOnlyCollection<Resource> resources)
+    {
+        var properties = resources
+            .Select(static resource => (
 
-            return @$"
+                name: Path.GetFileName(resource.Path)
+                    .Replace("-", string.Empty)
+                    .Replace(".", "_")
+                    .Replace(" ", "_"),
+                fileName: Path.GetFileName(resource.Path)
+            ))
+            .ToArray();
+
+        return @$"
 #nullable enable
 
 namespace {@namespace}
@@ -139,8 +134,7 @@ $"        public static Resource {resource.name} => new Resource(\"{resource.fil
     }}
 }}
 ";
-        }
-
-        #endregion
     }
+
+    #endregion
 }
