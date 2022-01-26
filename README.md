@@ -14,6 +14,14 @@ Install-Package H.Resources.Generator
 ```
 
 ### Usage
+Just install this package and add any resources to Resources subfolder. After you can use resources in the code:
+```cs
+var bytes = H.Resources.name_png.AsBytes();
+// or
+var text = H.Resources.name_txt.AsText();
+```
+
+### Advanced Usage
 
 ```xml
 <PropertyGroup>
