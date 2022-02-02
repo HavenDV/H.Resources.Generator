@@ -45,7 +45,7 @@ namespace {@namespace}
                 return assembly.GetManifestResourceStream(
                            assembly
                                .GetManifestResourceNames()
-                               .Single(resourceName => resourceName.EndsWith(FileName, StringComparison.InvariantCultureIgnoreCase)))
+                               .Single(resourceName => resourceName.EndsWith($"".{{FileName}}"", StringComparison.InvariantCultureIgnoreCase)))
                        ?? throw new ArgumentException($""\""{{FileName}}\"" is not found in embedded resources"");
             }}
             catch (InvalidOperationException exception)
