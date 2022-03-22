@@ -1,4 +1,4 @@
-﻿namespace H.Resources.Generator;
+﻿namespace H.Generators;
 
 public static class CodeGenerator
 {
@@ -21,7 +21,7 @@ namespace {@namespace}
 {{
     {modifier} class Resource
     {{
-        public string FileName {{ get;set; }}
+        public string FileName {{ get; set; }}
 
         public Resource(string fileName)
         {{
@@ -90,7 +90,7 @@ namespace {@namespace}
 
             return reader.ReadToEnd();
         }}
-{ (withSystemDrawing ? @"
+{(withSystemDrawing ? @"
         public System.Drawing.Image AsBitmap(Assembly? assembly = null)
         {
             using var stream = AsStream(assembly);

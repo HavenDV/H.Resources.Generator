@@ -1,4 +1,4 @@
-﻿namespace H.Resources.Generator;
+﻿namespace H.Generators;
 
 public class Resource
 {
