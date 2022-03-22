@@ -1,15 +1,29 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 namespace H.Resources.Generator;
 
 [Generator]
-public class HResourcesGenerator : ISourceGenerator
+public class HResourcesGenerator : IIncrementalGenerator
 {
     #region Methods
 
-    public void Execute(GeneratorExecutionContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        context.RegisterSourceOutput(
+            context.CompilationProvider
+                .Combine(context.AnalyzerConfigOptionsProvider)
+                .Combine(context.AdditionalTextsProvider.Collect()),
+            (context, tuple) => Execute(tuple.Left.Right, tuple.Right, context));
+    }
+
+    private static void Execute(
+        AnalyzerConfigOptionsProvider optionsProvider,
+        ImmutableArray<AdditionalText> texts,
+        SourceProductionContext context)
     {
         try
         {
@@ -17,18 +31,18 @@ public class HResourcesGenerator : ISourceGenerator
                 "H.Resource",
                 SourceText.From(
                     CodeGenerator.GenerateResource(
-                        GetGlobalOption(context, "Namespace") ?? "H",
-                        GetGlobalOption(context, "Modifier") ?? "internal",
-                        bool.Parse(GetGlobalOption(context, "WithSystemDrawing") ?? "false")),
+                        GetGlobalOption(optionsProvider, "Namespace") ?? "H",
+                        GetGlobalOption(optionsProvider, "Modifier") ?? "internal",
+                        bool.Parse(GetGlobalOption(optionsProvider, "WithSystemDrawing") ?? "false")),
                     Encoding.UTF8));
             context.AddSource(
                 "H.Resources",
                 SourceText.From(
                     CodeGenerator.GenerateResources(
-                        GetGlobalOption(context, "Namespace") ?? "H",
-                        GetGlobalOption(context, "Modifier") ?? "internal",
-                        GetGlobalOption(context, "ClassName") ?? "Resources",
-                        context.AdditionalFiles
+                        GetGlobalOption(optionsProvider, "Namespace") ?? "H",
+                        GetGlobalOption(optionsProvider, "Modifier") ?? "internal",
+                        GetGlobalOption(optionsProvider, "ClassName") ?? "Resources",
+                        texts
                             .Select(value => new Resource(value.Path))
                             .ToArray()),
                     Encoding.UTF8));
@@ -48,17 +62,15 @@ public class HResourcesGenerator : ISourceGenerator
         }
     }
 
-    public void Initialize(GeneratorInitializationContext context)
-    {
-    }
-
     #endregion
 
     #region Utilities
 
-    private static string? GetGlobalOption(GeneratorExecutionContext context, string name)
+    private static string? GetGlobalOption(
+        AnalyzerConfigOptionsProvider optionsProvider,
+        string name)
     {
-        return context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
+        return optionsProvider.GlobalOptions.TryGetValue(
             $"build_property.{nameof(HResourcesGenerator)}_{name}",
             out var result) &&
             !string.IsNullOrWhiteSpace(result)
@@ -67,11 +79,11 @@ public class HResourcesGenerator : ISourceGenerator
     }
 
     //private static string? GetOption(
-    //    GeneratorExecutionContext context, 
+    //    AnalyzerConfigOptionsProvider optionsProvider, 
     //    string name, 
     //    AdditionalText text)
     //{
-    //    return context.AnalyzerConfigOptions.GetOptions(text).TryGetValue(
+    //    return optionsProvider.GetOptions(text).TryGetValue(
     //        $"build_metadata.AdditionalFiles.{nameof(HResourcesGenerator)}_{name}", 
     //        out var result) &&
     //        !string.IsNullOrWhiteSpace(result)
