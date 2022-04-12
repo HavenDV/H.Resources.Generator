@@ -6,7 +6,7 @@ public class HResourcesGeneratorSnapshotTests : VerifyBase
     [TestMethod]
     public Task GeneratesEmptyResourcesCorrectly()
     {
-        return this.CheckSource();
+        return this.CheckSourceAsync(Array.Empty<CustomAdditionalText>());
     }
 
     //[TestMethod]
