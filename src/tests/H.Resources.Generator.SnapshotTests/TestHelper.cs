@@ -2,6 +2,7 @@
 using H.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace H.Ipc.Generator.IntegrationTests;
 
@@ -12,16 +13,11 @@ public static class TestHelper
         AdditionalText[] additionalTexts,
         CancellationToken cancellationToken = default)
     {
-        var dotNetFolder = Path.GetDirectoryName(typeof(object).Assembly.Location) ?? string.Empty;
+        var referenceAssemblies = ReferenceAssemblies.Net.Net60;
+        var references = await referenceAssemblies.ResolveAsync(null, cancellationToken);
         var compilation = (Compilation)CSharpCompilation.Create(
             assemblyName: "Tests",
-            references: new[]
-            {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetFolder, "System.Runtime.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetFolder, "System.Linq.dll")),
-                MetadataReference.CreateFromFile(Path.Combine(dotNetFolder, "netstandard.dll")),
-            },
+            references: references,
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         var driver = CSharpGeneratorDriver
             .Create(new HResourcesGenerator())
