@@ -33,10 +33,10 @@ public class HResourcesGenerator : IIncrementalGenerator
     {
         try
         {
-            var @namespace = options.GetGlobalOption($"{Name}_Namespace") ?? "H";
-            var modifier = options.GetGlobalOption($"{Name}_Modifier") ?? "internal";
-            var withSystemDrawing = bool.Parse(options.GetGlobalOption($"{Name}_WithSystemDrawing") ?? "false");
-            var className = options.GetGlobalOption($"{Name}_ClassName") ?? "Resources";
+            var @namespace = options.GetGlobalOption("Namespace", prefix: Name) ?? "H";
+            var modifier = options.GetGlobalOption("Modifier", prefix: Name) ?? "internal";
+            var withSystemDrawing = bool.Parse(options.GetGlobalOption("WithSystemDrawing", prefix: Name) ?? "false");
+            var className = options.GetGlobalOption("ClassName", prefix: Name) ?? "Resources";
 
             context.AddTextSource(
                 hintName: "H.Resource",
@@ -56,7 +56,7 @@ public class HResourcesGenerator : IIncrementalGenerator
         }
         catch (Exception exception)
         {
-            context.ReportException($"{Id}0001", exception);
+            context.ReportException("001", exception, prefix: Id);
         }
     }
 
