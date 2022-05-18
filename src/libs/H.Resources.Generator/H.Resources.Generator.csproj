@@ -9,7 +9,7 @@
     <Description>Generates static class with all Embedded resources with specified types. 
 Suitable for situations where you want to have a multi-target solution containing both .Net Framework and .Net Core/.Net 5
     </Description>
-    <PackageTags>resources, generator, source generator, csharp 9</PackageTags>
+    <PackageTags>resources;generator;source generator</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
@@ -17,11 +17,22 @@ Suitable for situations where you want to have a multi-target solution containin
 
   <ItemGroup>
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-    <None Include="H.Resources.Generator.props" Pack="true" PackagePath="build" />
+    <None Include="$(AssemblyName).props" Pack="true" PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" PrivateAssets="all" />
+    <PackageReference Include="H.Generators.Extensions" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
+
+  <!-- 
+    https://github.com/dotnet/roslyn/issues/52017#issuecomment-1046216200
+    This automatically adds explicit and transient dependencies so that they are available at the time the generator is executed. 
+  -->
+  <Target Name="AddGenerationTimeReferences" AfterTargets="ResolvePackageDependenciesForBuild">
+    <ItemGroup>
+      <None Include="@(ResolvedCompileFileDefinitions)" Pack="true" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
 
 </Project>

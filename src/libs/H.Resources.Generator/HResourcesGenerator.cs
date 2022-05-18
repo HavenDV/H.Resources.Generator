@@ -1,14 +1,20 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
+using H.Generators.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace H.Generators;
 
 [Generator]
 public class HResourcesGenerator : IIncrementalGenerator
 {
+    #region Constants
+
+    public const string Name = nameof(HResourcesGenerator);
+    public const string Id = "HRG";
+
+    #endregion
+
     #region Methods
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -17,79 +23,42 @@ public class HResourcesGenerator : IIncrementalGenerator
             context.CompilationProvider
                 .Combine(context.AnalyzerConfigOptionsProvider)
                 .Combine(context.AdditionalTextsProvider.Collect()),
-            (context, tuple) => Execute(tuple.Left.Right, tuple.Right, context));
+            static (context, tuple) => Execute(tuple.Left.Right, tuple.Right, context));
     }
 
     private static void Execute(
-        AnalyzerConfigOptionsProvider optionsProvider,
+        AnalyzerConfigOptionsProvider options,
         ImmutableArray<AdditionalText> texts,
         SourceProductionContext context)
     {
         try
         {
-            context.AddSource(
-                "H.Resource",
-                SourceText.From(
-                    CodeGenerator.GenerateResource(
-                        GetGlobalOption(optionsProvider, "Namespace") ?? "H",
-                        GetGlobalOption(optionsProvider, "Modifier") ?? "internal",
-                        bool.Parse(GetGlobalOption(optionsProvider, "WithSystemDrawing") ?? "false")),
-                    Encoding.UTF8));
-            context.AddSource(
-                "H.Resources",
-                SourceText.From(
-                    CodeGenerator.GenerateResources(
-                        GetGlobalOption(optionsProvider, "Namespace") ?? "H",
-                        GetGlobalOption(optionsProvider, "Modifier") ?? "internal",
-                        GetGlobalOption(optionsProvider, "ClassName") ?? "Resources",
-                        texts
-                            .Select(value => new Resource(value.Path))
-                            .ToArray()),
-                    Encoding.UTF8));
+            var @namespace = options.GetGlobalOption($"{Name}_Namespace") ?? "H";
+            var modifier = options.GetGlobalOption($"{Name}_Modifier") ?? "internal";
+            var withSystemDrawing = bool.Parse(options.GetGlobalOption($"{Name}_WithSystemDrawing") ?? "false");
+            var className = options.GetGlobalOption($"{Name}_ClassName") ?? "Resources";
+
+            context.AddTextSource(
+                hintName: "H.Resource",
+                text: CodeGenerator.GenerateResource(
+                    @namespace: @namespace,
+                    modifier: modifier,
+                    withSystemDrawing: withSystemDrawing));
+            context.AddTextSource(
+                hintName: "H.Resources",
+                text: CodeGenerator.GenerateResources(
+                    @namespace: @namespace,
+                    modifier: modifier,
+                    className: className,
+                    resources: texts
+                        .Select(value => new Resource(value.Path))
+                        .ToArray()));
         }
         catch (Exception exception)
         {
-            context.ReportDiagnostic(
-                Diagnostic.Create(
-                    new DiagnosticDescriptor(
-                        "HRG0001",
-                        "Exception: ",
-                        $"{exception}",
-                        "Usage",
-                        DiagnosticSeverity.Error,
-                        true),
-                    Location.None));
+            context.ReportException($"{Id}0001", exception);
         }
     }
-
-    #endregion
-
-    #region Utilities
-
-    private static string? GetGlobalOption(
-        AnalyzerConfigOptionsProvider optionsProvider,
-        string name)
-    {
-        return optionsProvider.GlobalOptions.TryGetValue(
-            $"build_property.{nameof(HResourcesGenerator)}_{name}",
-            out var result) &&
-            !string.IsNullOrWhiteSpace(result)
-            ? result
-            : null;
-    }
-
-    //private static string? GetOption(
-    //    AnalyzerConfigOptionsProvider optionsProvider, 
-    //    string name, 
-    //    AdditionalText text)
-    //{
-    //    return optionsProvider.GetOptions(text).TryGetValue(
-    //        $"build_metadata.AdditionalFiles.{nameof(HResourcesGenerator)}_{name}", 
-    //        out var result) &&
-    //        !string.IsNullOrWhiteSpace(result)
-    //        ? result
-    //        : null;
-    //}
 
     #endregion
 }
