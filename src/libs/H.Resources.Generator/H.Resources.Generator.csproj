@@ -22,7 +22,7 @@ Suitable for situations where you want to have a multi-target solution containin
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" PrivateAssets="all" />
-    <PackageReference Include="H.Generators.Extensions" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="H.Generators.Extensions" Version="1.0.5" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
