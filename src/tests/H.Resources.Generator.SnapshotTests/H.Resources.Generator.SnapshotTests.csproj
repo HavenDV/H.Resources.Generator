@@ -14,7 +14,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" />
-    <PackageReference Include="H.Generators.Extensions" Version="1.0.2" />
     <PackageReference Include="Verify.MSTest" Version="16.8.1" />
     <PackageReference Include="Verify.SourceGenerators" Version="1.4.0" />
   </ItemGroup>
