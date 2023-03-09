@@ -1,4 +1,4 @@
-﻿//HintName: H.Resource.cs
+﻿//HintName: H.Resource.generated.cs
 
 using System;
 using System.IO;

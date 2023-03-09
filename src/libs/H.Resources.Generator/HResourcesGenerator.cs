@@ -19,45 +19,41 @@ public class HResourcesGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterSourceOutput(
-            context.CompilationProvider
-                .Combine(context.AnalyzerConfigOptionsProvider)
-                .Combine(context.AdditionalTextsProvider.Collect()),
-            static (context, tuple) => Execute(tuple.Left.Right, tuple.Right, context));
+        context.AdditionalTextsProvider
+            .Select(static (x, _) => new Resource(x.Path))
+            .Collect()
+            .Combine(context.AnalyzerConfigOptionsProvider)
+            .SelectAndReportExceptions(GetSourceCode, context, Id)
+            .AddSource(context);
     }
 
-    private static void Execute(
-        AnalyzerConfigOptionsProvider options,
-        ImmutableArray<AdditionalText> texts,
-        SourceProductionContext context)
+    private static EquatableArray<FileWithName> GetSourceCode(
+        (ImmutableArray<Resource> Resources, AnalyzerConfigOptionsProvider Options) tuple,
+        CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var @namespace = options.GetGlobalOption("Namespace", prefix: Name) ?? "H";
-            var modifier = options.GetGlobalOption("Modifier", prefix: Name) ?? "internal";
-            var withSystemDrawing = bool.Parse(options.GetGlobalOption("WithSystemDrawing", prefix: Name) ?? "false");
-            var className = options.GetGlobalOption("ClassName", prefix: Name) ?? "Resources";
+        var (resources, options) = tuple;
+        
+        var @namespace = options.GetGlobalOption("Namespace", prefix: Name) ?? "H";
+        var modifier = options.GetGlobalOption("Modifier", prefix: Name) ?? "internal";
+        var withSystemDrawing = bool.Parse(options.GetGlobalOption("WithSystemDrawing", prefix: Name) ?? "false");
+        var className = options.GetGlobalOption("ClassName", prefix: Name) ?? "Resources";
 
-            context.AddTextSource(
-                hintName: "H.Resource",
-                text: CodeGenerator.GenerateResource(
+        return new[]
+        {
+            new FileWithName(
+                Name: "H.Resource.generated.cs",
+                Text: CodeGenerator.GenerateResource(
                     @namespace: @namespace,
                     modifier: modifier,
-                    withSystemDrawing: withSystemDrawing));
-            context.AddTextSource(
-                hintName: "H.Resources",
-                text: CodeGenerator.GenerateResources(
+                    withSystemDrawing: withSystemDrawing)),
+            new FileWithName(
+                Name: "H.Resources.generated.cs",
+                Text: CodeGenerator.GenerateResources(
                     @namespace: @namespace,
                     modifier: modifier,
                     className: className,
-                    resources: texts
-                        .Select(value => new Resource(value.Path))
-                        .ToArray()));
-        }
-        catch (Exception exception)
-        {
-            context.ReportException("001", exception, prefix: Id);
-        }
+                    resources: resources)),
+        }.ToImmutableArray().AsEquatableArray();
     }
 
     #endregion

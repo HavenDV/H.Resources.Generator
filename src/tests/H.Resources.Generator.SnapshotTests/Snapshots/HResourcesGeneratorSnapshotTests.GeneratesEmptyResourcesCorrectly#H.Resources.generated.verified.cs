@@ -1,4 +1,4 @@
-﻿//HintName: H.Resources.cs
+﻿//HintName: H.Resources.generated.cs
 
 #nullable enable
 
