@@ -20,6 +20,7 @@
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
     <EmbeddedResource Include="Resources\**\*.*" />
     <AdditionalFiles Include="Resources\**\*.*" />
+    <Compile Remove="Resources\**\*.*" />
   </ItemGroup>
 
 </Project>

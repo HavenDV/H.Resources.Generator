@@ -63,6 +63,7 @@ By default, it includes this code:
 <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
   <EmbeddedResource Include="Resources\**\*.*" />
   <AdditionalFiles Include="Resources\**\*.*" />
+  <Compile Remove="Resources\**\*.*" />
 </ItemGroup>
 ```
 You can disable this behavior with `<HResourcesGenerator_AddResourcesFolder>false</HResourcesGenerator_AddResourcesFolder>`
