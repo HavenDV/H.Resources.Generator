@@ -10,9 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{6E5BF389-3
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9CAA231D-7BE1-46C9-ACD6-EB2E569CEBEA}"
-	ProjectSection(SolutionItems) = preProject
-		src\tests\Directory.Build.props = src\tests\Directory.Build.props
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94FE90BF-FA05-46C6-A207-6E454A236659}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
 		README.md = README.md
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Resources.Generator.SnapshotTests", "src\tests\H.Resources.Generator.SnapshotTests\H.Resources.Generator.SnapshotTests.csproj", "{6958CFB3-B423-4573-9AD9-208E68889241}"
