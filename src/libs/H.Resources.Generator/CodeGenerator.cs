@@ -111,11 +111,7 @@ namespace {@namespace}
     {
         var properties = resources
             .Select(static resource => (
-
-                name: Path.GetFileName(resource.Path)
-                    .Replace("-", string.Empty)
-                    .Replace(".", "_")
-                    .Replace(" ", "_"),
+                name: SanitizeName(Path.GetFileName(resource.Path)),
                 fileName: Path.GetFileName(resource.Path)
             ))
             .ToArray();
@@ -134,6 +130,49 @@ $"        public static Resource {resource.name} => new Resource(\"{resource.fil
     }}
 }}
 ";
+    }
+    
+    internal static string SanitizeName(string? name)
+    {
+        static bool InvalidFirstChar(char ch)
+            => ch is not ('_' or >= 'A' and <= 'Z' or >= 'a' and <= 'z');
+
+        static bool InvalidSubsequentChar(char ch)
+            => ch is not (
+                '_'
+                or >= 'A' and <= 'Z'
+                or >= 'a' and <= 'z'
+                or >= '0' and <= '9'
+                );
+        
+        if (name is null || name.Length == 0)
+        {
+            return "";
+        }
+
+        if (InvalidFirstChar(name[0]))
+        {
+            name = "_" + name;
+        }
+
+        if (!name.Skip(1).Any(InvalidSubsequentChar))
+        {
+            return name;
+        }
+
+        Span<char> buf = stackalloc char[name.Length];
+        name.AsSpan().CopyTo(buf);
+        
+        for (var i = 1; i < buf.Length; i++)
+        {
+            if (InvalidSubsequentChar(buf[i]))
+            {
+                buf[i] = '_';
+            }
+        }
+
+        // Span<char>.ToString implementation checks for char type, new string(&buf[0], buf.length)
+        return buf.ToString();
     }
 
     #endregion

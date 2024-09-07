@@ -1,7 +1,7 @@
 ﻿namespace H.Ipc.Generator.IntegrationTests;
 
 [TestClass]
-public class HResourcesGeneratorSnapshotTests : VerifyBase
+public class Tests : VerifyBase
 {
     [TestMethod]
     public Task GeneratesEmptyResourcesCorrectly()
