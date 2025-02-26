@@ -20,7 +20,10 @@ public class HResourcesGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.AdditionalTextsProvider
-            .Select(static (x, _) => new Resource(x.Path))
+            .Combine(context.AnalyzerConfigOptionsProvider)
+            .Where(static pair =>
+                pair.Right.GetOption(pair.Left, "Resource", prefix: "HResourcesGenerator")?.ToUpperInvariant() == "TRUE")
+            .Select(static (x, _) => new Resource(x.Left.Path))
             .Collect()
             .Combine(context.AnalyzerConfigOptionsProvider)
             .SelectAndReportExceptions(GetSourceCode, context, Id)

@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Resource" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!--<CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="HResourcesGenerator_Type" />-->
   </ItemGroup>
 
@@ -19,7 +23,7 @@
   
   <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
     <EmbeddedResource Include="Resources\**\*.*" />
-    <AdditionalFiles Include="Resources\**\*.*" />
+    <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Resource="true" />
     <Compile Remove="Resources\**\*.*" />
   </ItemGroup>
 

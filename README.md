@@ -30,7 +30,7 @@ var text = H.Resources.name_txt.AsText();
 
 <ItemGroup Label="Images">
   <EmbeddedResource Include="Images\*.png" />
-  <AdditionalFiles Include="Images\*.png" />
+  <AdditionalFiles Include="Images\*.png" HResourcesGenerator_Resource="true" />
 </ItemGroup>
 ```
 
@@ -62,7 +62,7 @@ By default, it includes this code:
 ```xml
 <ItemGroup Condition="$(HResourcesGenerator_AddResourcesFolder)">
   <EmbeddedResource Include="Resources\**\*.*" />
-  <AdditionalFiles Include="Resources\**\*.*" />
+  <AdditionalFiles Include="Resources\**\*.*" HResourcesGenerator_Resource="true" />
   <Compile Remove="Resources\**\*.*" />
 </ItemGroup>
 ```

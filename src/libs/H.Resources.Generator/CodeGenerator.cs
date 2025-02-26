@@ -124,7 +124,7 @@ namespace {@namespace}
     {modifier} static class {className}
     {{
 {
-string.Join(Environment.NewLine, properties.Select(static resource =>
+string.Join("\n", properties.Select(static resource =>
 $"        public static Resource {resource.name} => new Resource(\"{resource.fileName}\");"))
 }
     }}

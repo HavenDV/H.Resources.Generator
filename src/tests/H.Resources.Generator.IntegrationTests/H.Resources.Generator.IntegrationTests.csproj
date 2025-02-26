@@ -4,7 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup Label="Base packages">
+  <Import Project="$(MSBuildThisFileDirectory)../../libs/H.Resources.Generator/H.Resources.Generator.props" />
+
+  <ItemGroup>
     <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -12,17 +14,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.8.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
-    <PackageReference Include="FluentAssertions" Version="8.1.1" />
+    <PackageReference Include="AwesomeAssertions" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup Label="GlobalUsings">
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
     <Using Include="FluentAssertions" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\**\*.*" />
-    <AdditionalFiles Include="Resources\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>
