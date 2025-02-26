@@ -24,7 +24,7 @@ public static class TestHelper
             additionalTextOptions.Add(additionalText.Path, options);
         }
 
-        var referenceAssemblies = ReferenceAssemblies.Net.Net60;
+        var referenceAssemblies = ReferenceAssemblies.Net.Net90;
         var references = await referenceAssemblies.ResolveAsync(null, cancellationToken);
         var compilation = (Compilation)CSharpCompilation.Create(
             assemblyName: "Tests",
