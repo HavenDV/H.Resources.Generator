@@ -11,10 +11,10 @@
     </PackageReference>
     <PackageReference Include="H.Generators.Extensions" Version="1.24.2" />
     <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.8.3" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.8.3" />
-    <PackageReference Include="AwesomeAssertions" Version="8.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.9.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.9.0" />
+    <PackageReference Include="AwesomeAssertions" Version="9.0.0" />
   </ItemGroup>
   
   <ItemGroup>
